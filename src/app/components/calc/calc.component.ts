@@ -57,7 +57,7 @@ export class CalcComponent implements OnInit {
     this.calculateSubTotal()
   }
 
-  roundNumber(num: number, decimals = 2) {
+  roundNumber(num: number) {
     return Math.round((Number(num) + Number.EPSILON) * 100) / 100
   }
 
