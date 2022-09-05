@@ -1,0 +1,21 @@
+.inputs {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    max-width: 26ch;
+}
+
+.inputs div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.inputs input {
+    padding: .25em;
+    width: 15ch;
+}
+
+.inputs .taxes input {
+    border-color: transparent;
+    background-color: transparent;
+}
