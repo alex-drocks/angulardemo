@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-calc',
@@ -28,14 +28,12 @@ export class CalcComponent implements AfterViewInit {
     }
   }
 
-  constructor() { }
+  @ViewChild('initialFocusInput') initialFocusInput!: ElementRef<HTMLInputElement>;
+
+  constructor() {}
 
   ngAfterViewInit(): void {
-    const autofocusInput = document.getElementById("subTotal") as HTMLInputElement
-    if (autofocusInput) {
-      autofocusInput.focus()
-      autofocusInput.select()
-    }
+      this.initialFocusInput.nativeElement.select()
   }
 
   getInputNumber(event: Event) {

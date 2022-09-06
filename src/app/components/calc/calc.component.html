@@ -1,22 +1,33 @@
 <section>
-    <h2>Taxes du Québec</h2>
+  <h2>Taxes du Québec</h2>
 
-    <div class="inputs">
-        <div class="subTotal">
-            <label for="subTotal">Sous-total :</label>
-            <input id="subTotal" type="text" [value]="this.rounded.subTotal" (input)="updateSubtotal($event)">
-        </div>
-        <div class="taxes">
-            <label for="subTotal">TPS :</label>
-            <input disabled type="text" id="tps" [value]="this.rounded.tps">
-        </div>
-        <div class="taxes">
-            <label for="subTotal">TVQ :</label>
-            <input disabled type="text" id="tvq" [value]="this.rounded.tvq">
-        </div>
-        <div class="total">
-            <label for="subTotal">Total :</label>
-            <input type="text" id="total" [value]="this.rounded.total" (input)="updateTotal($event)">
-        </div>
+  <div class="inputs">
+    <div class="subTotal">
+      <label for="subTotal">Sous-total :</label>
+      <input
+        #initialFocusInput
+        id="subTotal"
+        type="text"
+        [value]="this.rounded.subTotal"
+        (input)="updateSubtotal($event)"
+      />
     </div>
+    <div class="taxes">
+      <label for="subTotal">TPS :</label>
+      <input disabled type="text" id="tps" [value]="this.rounded.tps" />
+    </div>
+    <div class="taxes">
+      <label for="subTotal">TVQ :</label>
+      <input disabled type="text" id="tvq" [value]="this.rounded.tvq" />
+    </div>
+    <div class="total">
+      <label for="subTotal">Total :</label>
+      <input
+        type="text"
+        id="total"
+        [value]="this.rounded.total"
+        (input)="updateTotal($event)"
+      />
+    </div>
+  </div>
 </section>
