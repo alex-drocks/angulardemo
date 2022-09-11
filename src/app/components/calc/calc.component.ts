@@ -14,7 +14,7 @@ export class CalcComponent implements AfterViewInit {
     total: 0,
   }
 
-  private raw = {
+  public raw = {
     subTotal: 0,
     tps: 0,
     tvq: 0,
@@ -36,6 +36,16 @@ export class CalcComponent implements AfterViewInit {
       this.initialFocusInput.nativeElement.select()
   }
 
+  onUpdateSubtotal(event: Event) {
+    this.raw.subTotal = this.getInputNumber(event)
+    this.calculateTotal()
+  }
+
+  onUpdateTotal(event: Event) {
+    this.raw.total = this.getInputNumber(event)
+    this.calculateSubTotal()
+  }
+
   getInputNumber(event: Event) {
     const target = event.target as HTMLInputElement
     const value = target.value
@@ -45,16 +55,6 @@ export class CalcComponent implements AfterViewInit {
 
   replaceCommas(value: string) {
     return value?.replace(",", ".")
-  }
-
-  updateSubtotal(event: Event) {
-    this.raw.subTotal = this.getInputNumber(event)
-    this.calculateTotal()
-  }
-
-  updateTotal(event: Event) {
-    this.raw.total = this.getInputNumber(event)
-    this.calculateSubTotal()
   }
 
   roundNumber(num: number) {

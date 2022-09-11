@@ -9,7 +9,7 @@
         id="subTotal"
         type="text"
         [value]="this.rounded.subTotal"
-        (input)="updateSubtotal($event)"
+        (input)="onUpdateSubtotal($event)"
       />
     </div>
     <div class="taxes">
@@ -26,7 +26,7 @@
         type="text"
         id="total"
         [value]="this.rounded.total"
-        (input)="updateTotal($event)"
+        (input)="onUpdateTotal($event)"
       />
     </div>
   </div>
