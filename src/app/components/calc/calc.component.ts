@@ -1,4 +1,12 @@
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { taxRates, Tax } from 'src/app/models/taxes';
+
+interface CalculatorInputs {
+  subTotal: number,
+  tax1: number,
+  tax2: number,
+  total: number,
+}
 
 @Component({
   selector: 'app-calc',
@@ -6,34 +14,25 @@ import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
   styleUrls: ['./calc.component.css']
 })
 export class CalcComponent implements AfterViewInit {
+  public rounded: CalculatorInputs;
+  public raw: CalculatorInputs;
+  public taxRates: Tax;
+  @ViewChild('initialFocusInput')
+  initialFocusInput!: ElementRef<HTMLInputElement>;
 
-  public rounded = {
-    subTotal: 0,
-    tps: 0,
-    tvq: 0,
-    total: 0,
-  }
-
-  public raw = {
-    subTotal: 0,
-    tps: 0,
-    tvq: 0,
-    total: 0,
-  }
-
-  private taxRates = {
-    quebec: {
-      tps: 0.05,
-      tvq: 0.09975,
+  constructor() {
+    this.raw = {
+      subTotal: 0,
+      tax1: 0,
+      tax2: 0,
+      total: 0,
     }
+    this.rounded = this.raw;
+    this.taxRates = taxRates.quebec;
   }
-
-  @ViewChild('initialFocusInput') initialFocusInput!: ElementRef<HTMLInputElement>;
-
-  constructor() {}
 
   ngAfterViewInit(): void {
-      this.initialFocusInput.nativeElement.select()
+    this.initialFocusInput.nativeElement.select()
   }
 
   onUpdateSubtotal(event: Event) {
@@ -48,7 +47,7 @@ export class CalcComponent implements AfterViewInit {
 
   getInputNumber(event: Event) {
     const target = event.target as HTMLInputElement
-    const value = target.value
+    const value = target.value as string
     const number = Number(this.replaceCommas(value))
     return isNaN(number) ? 0 : number
   }
@@ -62,23 +61,36 @@ export class CalcComponent implements AfterViewInit {
   }
 
   calculateTotal() {
-    this.raw.tps = this.raw.subTotal * this.taxRates.quebec.tps
-    this.raw.tvq = this.raw.subTotal * this.taxRates.quebec.tvq
-    this.raw.total = this.raw.subTotal + this.raw.tps + this.raw.tvq
+    this.raw.tax1 = 0;
+    this.raw.tax2 = 0;
+    this.raw.tax1 = this.raw.subTotal * this.taxRates.tax1.rate
+    if (this.taxRates.tax2) {
+      this.raw.tax2 = this.raw.subTotal * this.taxRates.tax2.rate
+      this.raw.total = this.raw.subTotal + this.raw.tax1 + this.raw.tax2
+    } else {
+      this.raw.total = this.raw.subTotal + this.raw.tax1
+    }
     this.roundValues()
   }
 
   calculateSubTotal() {
-    this.raw.subTotal = this.raw.total / (1 + this.taxRates.quebec.tps + this.taxRates.quebec.tvq)
-    this.raw.tps = this.raw.subTotal * this.taxRates.quebec.tps
-    this.raw.tvq = this.raw.subTotal * this.taxRates.quebec.tvq
+    this.raw.tax1 = 0;
+    this.raw.tax2 = 0;
+    if (this.taxRates.tax2) {
+      this.raw.subTotal = this.raw.total / (1 + this.taxRates.tax1.rate + this.taxRates.tax2.rate)
+      this.raw.tax1 = this.raw.subTotal * this.taxRates.tax1.rate
+      this.raw.tax2 = this.raw.subTotal * this.taxRates.tax2.rate
+    } else {
+      this.raw.subTotal = this.raw.total / (1 + this.taxRates.tax1.rate)
+      this.raw.tax1 = this.raw.subTotal * this.taxRates.tax1.rate
+    }
     this.roundValues()
   }
 
   roundValues() {
     this.rounded.subTotal = this.roundNumber(this.raw.subTotal);
-    this.rounded.tps = this.roundNumber(this.raw.tps);
-    this.rounded.tvq = this.roundNumber(this.raw.tvq);
+    this.rounded.tax1 = this.roundNumber(this.raw.tax1);
+    this.rounded.tax2 = this.roundNumber(this.raw.tax2);
     this.rounded.total = this.roundNumber(this.raw.total);
   }
 
