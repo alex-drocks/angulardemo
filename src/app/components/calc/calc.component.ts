@@ -11,7 +11,7 @@ interface CalculatorInputs {
 @Component({
   selector: 'app-calc',
   templateUrl: './calc.component.html',
-  styleUrls: ['./calc.component.css']
+  styleUrls: ['./calc.component.scss']
 })
 export class CalcComponent implements AfterViewInit {
   public rounded: CalculatorInputs;
